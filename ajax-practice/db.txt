@@ -3,6 +3,6 @@ $conn = mysqli_connect(
     "", // hostname
     "", //username
     "", // password
-    "" // database
+    "" // database name
 );
 ?>
