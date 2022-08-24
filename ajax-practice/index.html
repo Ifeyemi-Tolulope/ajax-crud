@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/assets/css/bootstrap.css">
+    <script src="../assets/js/jquery.js"></script> 
+</head>
+<body>
+    <div id="container" class="col-xs-6 col-xs-offset-3">
+        <div class="row">
+
+        <h2 class="text-center">Search Our DataBase</h2>
+        <input class ="form-control" type="text" name="search" id='search' placeholder="SEarch Our Inventory">
+
+        <br>
+        <br>
+        <h2 class="bg-succes">
+            <ul id="results">
+                
+            </ul>
+        </h2>
+        </div>
+
+        <div class="row">
+            <form method="post" id="add-car-form" class="col-xs-6" action="add_cars.php">
+                <div class="form-group">
+                    <label for="car_name">Car Name</label>
+                    <input type="text" id="name" name="car_name" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <input type="submit" class="btn btn-primary" value="Add Car"> 
+                </div>
+                 
+            </form> 
+        </div>
+
+        <div class="row">
+            <div class="col-xs-6">
+                <table class="table">
+                    <thead>
+                        <th>Id</th>
+                        <th>Name</th>
+                    </thead>
+                    <tbody id="show-cars" class="show-cars">
+
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="col-xs-6">
+                <p id="feedback" class="alert alert-success">
+
+                </p>
+               <div id="action-container">
+                   HELLO
+               </div>
+            </div>
+
+        </div>
+
+<div class="col-xs-6">
+    <div id="car_result">
+
+    </div>
+</div>
+
+<div class="col-xs-6">
+    <div id="result">
+
+    </div>
+</div>
+    
+
+</div> 
+
+   
+
+    </body>
+
+    <script>
+        $(document).ready(function(){
+            ////***********SEARCH *************************////////
+            $('#search').keyup(function(){
+               var search =  $(this).val();
+
+               $.ajax({
+                   url:"process.php",
+                   type:"POST",
+                   data:{search:search},
+                   success: function(data){
+                       if(!data.error){
+                        $('#results').html(data);
+                       }       
+                   }
+               });
+            });
+
+  ////***********Display Table***********////
+function current_table_data(){
+    view = "view";
+    $.ajax({
+            url: "process.php",
+            data:{view:view},
+            type:"POST",
+            success: function(data){
+                if(!data.error){
+                    $('#show-cars').html(data);
+                }
+            }
+        });
+}
+// current_table_data();
+
+setInterval(function(){current_table_data()},500);
+// setTimeout(function(){current_table_data()},500);
+
+
+//////__add to table
+
+$('#add-car-form').submit(function(evt){
+    evt.preventDefault();
+    var input = $(this).serialize();
+
+    $.post('process.php',input,function(data){
+        $('#add-car-form')[0].reset();
+    });
+
+});
+
+    });
+    </script>
+</html>
